@@ -10,7 +10,7 @@
 
 ### Training and Testing Accuracy for each model
 
-![](C:\Users\user\OneDrive\Desktop\accuracy.png)
+![](/assets/accuracy.png)
 
 ### Feature Extraction Dictionary
 ```python
