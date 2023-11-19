@@ -15,7 +15,7 @@ while True:
     if option in ['n', 'NO', 'no', 'No']:
         break
 
-path = 'C:/Users/user/PycharmProjects/phishing_websites'
+path = 'C:/Users/user/PycharmProjects/phishing_websites/models'
 all_files = os.listdir(path)  # Directory to access all files in the project
 models = [model for model in all_files if model.endswith('.h5')]  # Models are files that end with .h5
 
