@@ -1,4 +1,4 @@
-import tkinter as tk
+'''import tkinter as tk
 from tkinter import messagebox
 import os
 import pickle
@@ -132,5 +132,55 @@ class PhishingWebsiteChecker:
 if __name__ == "__main__":
     root = tk.Tk()
     app = PhishingWebsiteChecker(root)
-    root.mainloop()
+    root.mainloop()'''
+
+from flask import Flask, request, render_template
+import os
+import pickle
+import pandas as pd
+from features import extract_features  # Your feature extraction logic
+
+app = Flask(__name__)
+
+# Load models
+path = 'models'
+all_files = os.listdir(path)
+models = [os.path.join(path, model) for model in all_files if model.endswith('.h5')]
+
+
+def load_model(model_path):
+    with open(model_path, 'rb') as file:
+        return pickle.load(file)
+
+
+loaded_models = {os.path.basename(model).replace('.h5', ''): load_model(model) for model in models}
+
+
+@app.route('/')
+def home():
+    return render_template('index.html', title="Phishing Website Checker")
+
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    websites = request.form.get('websites').splitlines()  # Split user input into list of URLs
+    all_features = [extract_features(url) for url in websites]
+    url_df = pd.DataFrame(all_features)
+
+    results = {}
+    for model_name, model in loaded_models.items():
+        try:
+            predictions = model.predict(url_df)
+            results[model_name] = {url: "✅ Benign" if pred == 'good' else "❌ Phishing" for url, pred in
+                                   zip(websites, predictions)}
+        except Exception as e:
+            results[model_name] = f"Error: {str(e)}"
+
+    return render_template('results.html', results=results, title="Prediction Results", websites=websites)
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
+
+
 

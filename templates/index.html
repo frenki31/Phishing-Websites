@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Phishing Website Checker</h1>
+        <p>Enter the URLs you want to check (one per line) and click "Check for Phishing."</p>
+        <form method="POST" action="/predict" class="form">
+            <textarea name="websites" rows="8" placeholder="e.g., https://example.com" required></textarea>
+            <button type="submit">Check for Phishing</button>
+        </form>
+    </div>
+</body>
+</html>
